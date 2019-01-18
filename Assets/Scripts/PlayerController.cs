@@ -84,12 +84,12 @@ public class PlayerController : MonoBehaviour {
     //Remove points while walking
     public IEnumerator Stepping()
     {
-        Debug.Log("Ienumatator Playing");
+        yield return new WaitForSeconds(10f);
         if (isMoving == true)
         {
-            Debug.Log("Is walking PlayerController pickup");
+            Debug.Log("Player Is Stepping");
             HUDctrl.GetComponent<HUDController>().DecreaseCountSteps();
         }
-        yield return new WaitForSeconds(5f);
+        
     }
 }
