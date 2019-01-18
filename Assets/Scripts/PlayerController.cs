@@ -16,7 +16,10 @@ public class PlayerController : MonoBehaviour {
 	RaycastHit hit;
 
 	public bool isMoving = false;
+    public bool pause = false;
+    public GameObject HUDctrl;
 
+    //Getting Animator
 	void Start () 
 	{
 		myAnim = GetComponent<Animator> ();
@@ -24,6 +27,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Update () 
 	{
+        //Click to move
 		if(Input.GetMouseButtonDown(0)) 
 		{
 			Ray ray = camera.ScreenPointToRay (Input.mousePosition);
@@ -35,6 +39,7 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
+        //Moving the player
 		if (isMoving == true) 
 		{
 			Vector3 relativePos = hit.point - transform.position;
@@ -44,12 +49,47 @@ public class PlayerController : MonoBehaviour {
 
 			transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, rotSpeed * Time.deltaTime);
 
-			dist = Vector3.Distance (hit.point, transform.position);
+            dist = Vector3.Distance (hit.point, transform.position);
 			if (dist < 0.5f) 
 			{
 				myAnim.SetBool ("isRunning", false);
 				isMoving = false;
 			}
 		}
-	}
+        if (isMoving == true)
+        {
+            Debug.Log("Is moving");
+            HUDctrl.GetComponent<HUDController>().DecreaseCountSteps();
+        }
+    }
+
+    //Picking up items
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Collectables")
+        {
+            other.gameObject.SetActive(false);
+            HUDctrl.GetComponent<HUDController>().IncrementCount();
+
+        }
+
+        if (other.gameObject.tag == "Locations")
+        {
+            other.gameObject.SetActive(false);
+            HUDctrl.GetComponent<HUDController>().LocationPoints();
+
+        }
+    }
+
+    //Remove points while walking
+    public IEnumerator Stepping()
+    {
+        Debug.Log("Ienumatator Playing");
+        if (isMoving == true)
+        {
+            Debug.Log("Is walking PlayerController pickup");
+            HUDctrl.GetComponent<HUDController>().DecreaseCountSteps();
+        }
+        yield return new WaitForSeconds(5f);
+    }
 }

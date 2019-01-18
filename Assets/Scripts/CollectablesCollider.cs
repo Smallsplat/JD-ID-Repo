@@ -14,8 +14,8 @@ public class CollectablesCollider : MonoBehaviour {
 		GameObject ccgo = GameObject.Find ("Collectables Controller");
 		cc = ccgo.GetComponent<CollectablesController>();
 	}
-		
-	void OnTriggerEnter (Collider col) 
+	/* 
+    void OnTriggerEnter (Collider col) 
 	{
 		Debug.Log (gameObject.name + "hit");
 		source = col.GetComponent<AudioSource> ();
@@ -24,5 +24,6 @@ public class CollectablesCollider : MonoBehaviour {
 		cc.IncrementCount(gameObject);
 
 		Destroy (gameObject);
-	}
+	} */
+ 
 }
