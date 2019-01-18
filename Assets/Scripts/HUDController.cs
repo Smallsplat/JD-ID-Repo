@@ -68,7 +68,6 @@ public class HUDController : MonoBehaviour {
         //End game detectors
 		if (healthBar.fillAmount <= 0 && !endGame)
         {
-			cc.SubmitUserInformation ();
             GameEnd();
 			endGame = true;
 
@@ -76,7 +75,6 @@ public class HUDController : MonoBehaviour {
 
 		if (t <= 0 && !endGame)
         {
-			cc.SubmitUserInformation ();
             GameEnd();
 			endGame = true;
 

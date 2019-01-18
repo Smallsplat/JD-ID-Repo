@@ -11,7 +11,9 @@ public class MenuController : MonoBehaviour
     public GameObject characterMenu;
     public GameObject musicSlider;
 
-	public Text username;
+    public CollectablesController cc;
+
+    public Text username;
 
     //Setting the Menu to be default loadup
     void Start()
@@ -24,13 +26,15 @@ public class MenuController : MonoBehaviour
     //Loads into the main game
 	public void PlayGame()
 	{
-		DataManager.userName = username.text;
+        cc.LoadData();
+        DataManager.userName = username.text;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex + 1);
-	}
+    }
 
     //Loads into the main Menu
     public void GoToMenu()
     {
+        cc.SaveData();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
