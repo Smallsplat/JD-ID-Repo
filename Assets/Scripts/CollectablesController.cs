@@ -46,11 +46,17 @@ public class CollectablesController : MonoBehaviour
 		Debug.Log ("Goat = " + cd[1].collectableNum);
 	}
 
+	public void SubmitUserInformation()
+	{
+		int score = cd [0].collectableNum + cd [1].collectableNum;
+		DataManager.PassNewData (score);
+	}
+
 	public void SaveData()
 	{
 		BinaryFormatter bf = new BinaryFormatter ();
 		FileStream fs = File.Create (Application.persistentDataPath + "/gameData.dat");
-		bf.Serialize (fs, cd);
+		bf.Serialize (fs, DataManager.dataStorage);
 		fs.Close ();
 		Debug.Log ("Data Saved.");
 	}
@@ -60,7 +66,7 @@ public class CollectablesController : MonoBehaviour
 		if (File.Exists (Application.persistentDataPath + "/gameData.dat")) {
 			BinaryFormatter bf = new BinaryFormatter ();
 			FileStream fs = File.Open (Application.persistentDataPath + "/gameData.dat", FileMode.Open);
-			cd = (CollectablesData[])bf.Deserialize (fs);
+			DataManager.dataStorage = (List<Data>)bf.Deserialize (fs);
 			fs.Close ();
 			Debug.Log ("Data Loaded.");
 		} else 

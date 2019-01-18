@@ -10,6 +10,8 @@ public class HighScoreController : MonoBehaviour {
         GameObject hcgo = GameObject.Find("HUD Controller");
         hc = hcgo.GetComponent<HUDController>();
 
-        hc.AddItemToScoreboard(gameObject);
+        //hc.AddItemToScoreboard(gameObject);
     }
+
+
 }

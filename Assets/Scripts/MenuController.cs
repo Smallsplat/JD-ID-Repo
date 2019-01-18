@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 public class MenuController : MonoBehaviour 
 {
 	public AudioSource musicSource;
@@ -10,6 +10,8 @@ public class MenuController : MonoBehaviour
 	public GameObject optionsMenu;
     public GameObject characterMenu;
     public GameObject musicSlider;
+
+	public Text username;
 
     //Setting the Menu to be default loadup
     void Start()
@@ -22,6 +24,7 @@ public class MenuController : MonoBehaviour
     //Loads into the main game
 	public void PlayGame()
 	{
+		DataManager.userName = username.text;
 		SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex + 1);
 	}
 

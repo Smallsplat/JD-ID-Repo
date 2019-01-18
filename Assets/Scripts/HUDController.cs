@@ -33,6 +33,10 @@ public class HUDController : MonoBehaviour {
     public GameObject scrollContent;
     public GameObject addedItem;
 
+	public CollectablesController cc;
+
+	bool endGame = false;
+
     void Start() {
         //Setting up Default Values
         Time.timeScale = 1;
@@ -44,7 +48,8 @@ public class HUDController : MonoBehaviour {
     void Update() {
 
         //Time
-        float t = 600 - (Time.time - startTime);
+        //float t = 600 - (Time.time - startTime);
+		float t = 10 - (Time.time - startTime);
         string minutes = ((int)t / 60).ToString("00");
         string seconds = ((int)t % 60).ToString("00");
         timeText.text = minutes + ":" + seconds;
@@ -58,14 +63,20 @@ public class HUDController : MonoBehaviour {
         }
 
         //End game detectors
-        if (healthBar.fillAmount <= 0)
+		if (healthBar.fillAmount <= 0 && !endGame)
         {
+			cc.SubmitUserInformation ();
             GameEnd();
+			endGame = true;
+
         }
 
-        if (t <= 0)
+		if (t <= 0 && !endGame)
         {
+			cc.SubmitUserInformation ();
             GameEnd();
+			endGame = true;
+
         }
 
 
@@ -143,14 +154,22 @@ public class HUDController : MonoBehaviour {
         Time.timeScale = 0;
         HUDPanel.gameObject.SetActive(false);
         EndPanel.gameObject.SetActive(true);
+		AddItemToScoreboard ();
+
     }
 
     //Adding End Menu stuff?
-    public void AddItemToScoreboard(GameObject go)
+    public void AddItemToScoreboard()
     {
-        addedItem = Instantiate(scrollPrefab);
-        addedItem.transform.SetParent(scrollContent.transform);
-        addedItem.transform.localPosition = Vector3.zero;
-        addedItem.transform.localScale = Vector3.one;
+		for (int i = 0; i < DataManager.GetDataStorageSize (); i++) 
+		{
+			addedItem = Instantiate(scrollPrefab);
+			addedItem.transform.SetParent(scrollContent.transform);
+			addedItem.transform.localPosition = Vector3.zero;
+			addedItem.transform.localScale = Vector3.one;
+
+			addedItem.transform.Find ("Username (Text)").GetComponent<Text> ().text = DataManager.GetDataName (i);
+			addedItem.transform.Find ("User Score (Text)").GetComponent<Text> ().text = DataManager.GetDataScore(i).ToString();
+		} 
     }
 }

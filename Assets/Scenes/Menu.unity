@@ -5709,6 +5709,7 @@ MonoBehaviour:
   optionsMenu: {fileID: 971511347}
   characterMenu: {fileID: 2088381137}
   musicSlider: {fileID: 0}
+  username: {fileID: 1644168412}
 --- !u!4 &1069786190
 Transform:
   m_ObjectHideFlags: 0

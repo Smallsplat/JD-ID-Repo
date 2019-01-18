@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 [System.Serializable]
 public class UserScoreData
 {
-    public GameObject Username;
-    public GameObject Score;
-    public Sprite Character;
+    public Text Username;
+    public Text Score;
 }
 
