@@ -6,7 +6,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class CollectablesController : MonoBehaviour 
 {
-	public CollectablesData[] cd; 
+    public HUDController Hudctrl;
+
+    public CollectablesData[] cd;
 
 	void Awake()
 	{
@@ -32,7 +34,7 @@ public class CollectablesController : MonoBehaviour
 	public void IncrementCount (GameObject go)
 	{
 		if (go.name.Contains ("Gold Coin")) {
-			cd [0].collectableNum++;
+			cd[0].collectableNum++;
 		} else if (go.name.Contains ("Golden Goat")) {
 			cd[1].collectableNum++;
 		}
@@ -48,7 +50,7 @@ public class CollectablesController : MonoBehaviour
 
 	public void SubmitUserInformation()
 	{
-		int score = cd [0].collectableNum + cd [1].collectableNum;
+		int score = Hudctrl.finalPoints;
 		DataManager.PassNewData (score);
 	}
 

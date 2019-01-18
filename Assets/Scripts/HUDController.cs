@@ -11,9 +11,12 @@ public class HUDController : MonoBehaviour {
 
     public Text coinsText;
     private int coins;
+
     public Text pointsText;
     private int points;
+
     public Text finalPointsText;
+    public int finalPoints;
 
     public Image healthBar;
     public Transform HUDCanvasLocation;
@@ -23,7 +26,8 @@ public class HUDController : MonoBehaviour {
     public GameObject EndPanel;
     public GameObject optionsMenu;
     public AudioSource musicSource;
-    public bool escapeIsTrue;
+    public bool escapeIsTrue = false;
+    public bool CanRemoveStepPoints = true;
     public Transform UICenter;
 
     public GameObject Playerctrl;
@@ -48,8 +52,7 @@ public class HUDController : MonoBehaviour {
     void Update() {
 
         //Time
-        //float t = 600 - (Time.time - startTime);
-		float t = 10 - (Time.time - startTime);
+		float t = 15 - (Time.time - startTime);
         string minutes = ((int)t / 60).ToString("00");
         string seconds = ((int)t % 60).ToString("00");
         timeText.text = minutes + ":" + seconds;
@@ -126,7 +129,6 @@ public class HUDController : MonoBehaviour {
         healthBar.fillAmount = healthBar.fillAmount + 0.1f;
         points = points + 10;
         pointsText.text = points.ToString();
-        finalPointsText.text = points.ToString();
     }
 
     //Gain points visiting locations
@@ -136,34 +138,47 @@ public class HUDController : MonoBehaviour {
         healthBar.fillAmount = healthBar.fillAmount + 0.25f;
         points = points + 100;
         pointsText.text = points.ToString();
-        finalPointsText.text = points.ToString();
     }
 
     //Remove points while walking
     public void DecreaseCountSteps()
     {
-        Debug.Log("Removing Step Points");
-        points = points - 1;
-        pointsText.text = points.ToString();
-        finalPointsText.text = points.ToString();
+        if (CanRemoveStepPoints == true)
+        {
+            Debug.Log("Removing Step Points");
+            points = points - 1;
+            pointsText.text = points.ToString();
+            CanRemoveStepPoints = false;
+            StartCoroutine(StepPointCooldown());
+        }
+    }
+    IEnumerator StepPointCooldown()
+    {
+        yield return new WaitForSeconds(0.5f);
+        CanRemoveStepPoints = true;
     }
 
     //Spawning the end menu
     public void GameEnd()
     {
+        finalPoints = points;
+        finalPointsText.text = finalPoints.ToString();
         Time.timeScale = 0;
         HUDPanel.gameObject.SetActive(false);
         EndPanel.gameObject.SetActive(true);
-		AddItemToScoreboard ();
-
+        cc.SubmitUserInformation();
+        AddItemToScoreboard ();
     }
 
     //Adding End Menu stuff?
     public void AddItemToScoreboard()
     {
-		for (int i = 0; i < DataManager.GetDataStorageSize (); i++) 
+        Debug.Log("activate");
+        for (int i = 0; i < DataManager.GetDataStorageSize (); i++)
 		{
-			addedItem = Instantiate(scrollPrefab);
+            Debug.Log("Inset New Data type" + i);
+
+            addedItem = Instantiate(scrollPrefab);
 			addedItem.transform.SetParent(scrollContent.transform);
 			addedItem.transform.localPosition = Vector3.zero;
 			addedItem.transform.localScale = Vector3.one;
