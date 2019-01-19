@@ -18,10 +18,20 @@ public class HUDController : MonoBehaviour {
     public Text finalPointsText;
     public int finalPoints;
 
+    public Text stepsText;
+    private int steps;
+
+    private int chance;
+
+    public Text endUsername;
+
     public Image healthBar;
+
     public Transform HUDCanvasLocation;
     public GameObject CoinCollectedText;
     public GameObject HealthCollectedText;
+    public GameObject goatPanel;
+    public GameObject goat;
     public GameObject HUDPanel;
     public GameObject EndPanel;
     public GameObject optionsMenu;
@@ -37,9 +47,15 @@ public class HUDController : MonoBehaviour {
     public GameObject scrollContent;
     public GameObject addedItem;
 
-	public CollectablesController cc;
+    public Animator locationMT;
+    public Animator locationFT;
+    public Animator locationHA;
+    public Animator locationRS;
+    public Animator locationLS;
 
-	bool endGame = false;
+    public CollectablesController cc;
+
+    bool endGame = false;
 
     void Start() {
         //Setting up Default Values
@@ -47,12 +63,17 @@ public class HUDController : MonoBehaviour {
         startTime = Time.time;
         HUDPanel.gameObject.SetActive(true);
         EndPanel.gameObject.SetActive(false);
-    }
+        locationMT.enabled = (false);
+        locationFT.enabled = (false);
+        locationHA.enabled = (false);
+        locationRS.enabled = (false);
+        locationLS.enabled = (false);
+}
 
     void Update() {
 
         //Time
-		float t = 15 - (Time.time - startTime);
+		float t = 150 - (Time.time - startTime);
         string minutes = ((int)t / 60).ToString("00");
         string seconds = ((int)t % 60).ToString("00");
         timeText.text = minutes + ":" + seconds;
@@ -86,7 +107,6 @@ public class HUDController : MonoBehaviour {
         {
             if (escapeIsTrue == false)
             {
-                Debug.Log("Pressed Escape");
                 Time.timeScale = 0;
                 optionsMenu.gameObject.SetActive(true);
                 escapeIsTrue = true;
@@ -94,7 +114,6 @@ public class HUDController : MonoBehaviour {
 
             else if (escapeIsTrue == true)
             {
-                Debug.Log("Pressed Escape");
                 Time.timeScale = 1;
                 optionsMenu.gameObject.SetActive(false);
                 escapeIsTrue = false;
@@ -129,6 +148,38 @@ public class HUDController : MonoBehaviour {
         pointsText.text = points.ToString();
     }
 
+    //Picking up the goat
+    public void GoatUI()
+    {
+        goatPanel.gameObject.SetActive(true);
+    }
+
+    public void HideGoatUI()
+    {
+        goatPanel.gameObject.SetActive(false);
+    }
+
+    //Picking up the goat
+    public void GoatPicked()
+    {
+        //Adding Values to Varaibles
+        Debug.Log("Goat Points Awarded");
+        chance = Random.Range(1,2);
+        if (chance == 1)
+        {
+            points = points + 50;
+            pointsText.text = points.ToString();
+            goat.gameObject.SetActive(false);
+        }
+        else
+        {
+            points = points - 50;
+            pointsText.text = points.ToString();
+            goat.gameObject.SetActive(false);
+        }
+
+    }
+
     //Gain points visiting locations
     public void LocationPoints()
     {
@@ -138,16 +189,47 @@ public class HUDController : MonoBehaviour {
         pointsText.text = points.ToString();
     }
 
+    public void MoveLocationMT()
+    {
+        locationMT.enabled = (true);
+        locationMT.Play("Location Animation");
+
+    }
+    public void MoveLocationFT()
+    {
+        locationFT.enabled = (true);
+        locationFT.Play("Location Animation");
+
+    }
+    public void MoveLocationHA()
+    {
+        locationHA.enabled = (true);
+        locationHA.Play("Location Animation");
+
+    }
+    public void MoveLocationRS()
+    {
+        locationRS.enabled = (true);
+        locationRS.Play("Location Animation");
+
+    }
+    public void MoveLocationLS()
+    {
+        locationLS.enabled = (true);
+        locationLS.Play("Location Animation");
+    }
+
     //Remove points while walking
     public void DecreaseCountSteps()
     {
         if (CanRemoveStepPoints == true)
         {
-            Debug.Log("Removing Step Points");
             points = points - 1;
             pointsText.text = points.ToString();
             CanRemoveStepPoints = false;
             StartCoroutine(StepPointCooldown());
+            steps = steps + 1;
+            stepsText.text = steps.ToString();
         }
     }
     IEnumerator StepPointCooldown()
@@ -171,10 +253,9 @@ public class HUDController : MonoBehaviour {
     //Adding End Menu stuff?
     public void AddItemToScoreboard()
     {
-        Debug.Log("activate");
         for (int i = 0; i < DataManager.GetDataStorageSize (); i++)
 		{
-            Debug.Log("Inset New Data type" + i);
+            endUsername.text = DataManager.GetDataName(i);
 
             addedItem = Instantiate(scrollPrefab);
 			addedItem.transform.SetParent(scrollContent.transform);
