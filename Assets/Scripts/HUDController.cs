@@ -23,6 +23,9 @@ public class HUDController : MonoBehaviour {
 
     private int chance;
 
+    private string goatText;
+    public Text goatResultText;
+
     public Text endUsername;
 
     public Image healthBar;
@@ -68,12 +71,13 @@ public class HUDController : MonoBehaviour {
         locationHA.enabled = (false);
         locationRS.enabled = (false);
         locationLS.enabled = (false);
-}
+        goatText = " ";
+    }
 
     void Update() {
 
         //Time
-		float t = 150 - (Time.time - startTime);
+		float t = 120 - (Time.time - startTime);
         string minutes = ((int)t / 60).ToString("00");
         string seconds = ((int)t % 60).ToString("00");
         timeText.text = minutes + ":" + seconds;
@@ -167,12 +171,16 @@ public class HUDController : MonoBehaviour {
         chance = Random.Range(1,2);
         if (chance == 1)
         {
+            goatText = "BLESSED";
+            goatResultText.text = goatText;
             points = points + 50;
             pointsText.text = points.ToString();
             goat.gameObject.SetActive(false);
         }
         else
         {
+            goatText = "CURSED";
+            goatResultText.text = goatText;
             points = points - 50;
             pointsText.text = points.ToString();
             goat.gameObject.SetActive(false);
