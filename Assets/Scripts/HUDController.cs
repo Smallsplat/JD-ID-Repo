@@ -192,7 +192,6 @@ public class HUDController : MonoBehaviour {
     public void LocationPoints()
     {
         Debug.Log("Place Points Awarded");
-        healthBar.fillAmount = healthBar.fillAmount + 0.25f;
         points = points + 100;
         pointsText.text = points.ToString();
     }
